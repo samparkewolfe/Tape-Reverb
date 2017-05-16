@@ -125,17 +125,6 @@ revmodel::revmodel()
     //Initialise the unit to the original settings of Jezars
     setOriginalParameters();
     
-    //Gui:
-    addAndMakeVisible(&stereoSpreadSlider);
-    stereoSpreadSlider.addListener(this);
-    stereoSpreadSlider.setSliderStyle(Slider::LinearBarVertical);
-    stereoSpreadSlider.setRange(0, 100);
-    stereoSpreadSlider.setValue(23);
-    
-    addAndMakeVisible(&stereoSpreadSliderLabel);
-    stereoSpreadSliderLabel.setText("Stereo Spread", dontSendNotification);
-    stereoSpreadSliderLabel.attachToComponent(&stereoSpreadSlider, false);
-    
     addAndMakeVisible(&originalParamsButton);
     originalParamsButton.setButtonText("Reset");
     originalParamsButton.addListener(this);
@@ -302,7 +291,6 @@ void revmodel::resized()
     originalParamsButton.setBounds(areaextra.removeFromTop(areaextra.getHeight()*0.1));
     areaextra.removeFromTop(20);
     areaextra.removeFromTop(30);
-    stereoSpreadSlider.setBounds(areaextra);
     
     Rectangle<int> areaCombs(area);
     //areaCombs.removeFromBottom(area.getHeight()/2);

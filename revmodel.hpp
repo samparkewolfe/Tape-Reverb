@@ -122,12 +122,9 @@ private:
     //With the currect code I would put these in arrays.
     // Comb filters
     std::vector<stereoComb*> combs;
-    
 
     //guis
     GroupComponent group;
-    Slider stereoSpreadSlider;
-    Label stereoSpreadSliderLabel;
     TextButton originalParamsButton;
     
 };

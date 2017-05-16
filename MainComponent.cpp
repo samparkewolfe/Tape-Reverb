@@ -124,7 +124,7 @@ void MainContentComponent::resized()
     areaSliders.removeFromTop(30);
     
     int sliderGap = 10;
-    int sliderWidth = areaSliders.getWidth()/6 - 10;
+    int sliderWidth = areaSliders.getWidth()/5 - 10;
     modeToggle.setBounds(areaSliders.removeFromLeft(sliderWidth));
     areaSliders.removeFromLeft(sliderGap);
     feedbackSlider.setBounds(areaSliders.removeFromLeft(sliderWidth));
