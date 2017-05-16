@@ -8,7 +8,6 @@
 #define _revmodel_
 
 #include "comb.hpp"
-#include "allpass.hpp"
 #include "tuning.h"
 #include "JuceHeader.h"
 #include <array>
@@ -29,11 +28,10 @@ public:
     Slider tuningSlider;
     Label sliderLabel;
     //Left and right comb filters.
-    comb combL, combR;
+    comb combL; //, combR;
     //These are the buffers that the comb filters write too.
-    std::vector<float> bufcombL, bufcombR;
+    std::array<float, 44100> bufcombL;
     //The amount of stereo spread this will be variable unlike the "stereospread" variable which is constant and used to initialise bufcombR.
-    int thisstereoSpread;
     
     stereoComb();
     stereoComb(const stereoComb& copy);
@@ -51,53 +49,8 @@ public:
     void	setfeedback(float val);
     //Each comb filter is processed as L and R to bring in spacialisation. The right buffer is bigger than the left buffer by the stereo spread variable.
     float    processLeft(float val);
-    float    processRight(float val);
-    //This controlls howmuch larger in samples the right buffer is than the left.
-    void    setStereoSpread(const int& val);
     
 };
-
-
-//-------------------------------------------------------------
-//Allpass Filter Class
-//-------------------------------------------------------------
-class stereoAllpass
-:
-public Component,
-Slider::Listener
-{
-    
-public:
-    //This controls the size of the comb filters buffer.
-    Slider tuningSlider;
-    Label sliderLabel;
-    //Left and right all pass filters.
-    allpass	allpassL, allpassR;
-    //These are the buffers that the allpass filters will write too.
-        std::vector<float> bufallpassL, bufallpassR;
-    //This variable is the same as the comb filters variable.
-    int thisstereoSpread;
-    
-    stereoAllpass();
-    stereoAllpass(const stereoAllpass& copy);
-    
-    void sliderValueChanged(Slider* slider) override {};
-    void resized() override;
-    
-    //This variable is the same as the comb filters variable.
-    void	setbuffers(int size);
-    //This variable is the same as the comb filters variable.
-    void	mute();
-    //This variable is the same as the comb filters variable.
-    void	setfeedback(float val);
-    //This variable is the same as the comb filters variable.
-    float    processLeft(float val);
-    float    processRight(float val);
-    //This variable is the same as the comb filters variable.
-    void    setStereoSpread(const int& val);
-    
-};
-
 
 
 //-------------------------------------------------------------
@@ -116,16 +69,14 @@ public:
 			void	mute();
 			void	processmix(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip);
 			void	processreplace(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip);
-			void	setroomsize(float value);
-			float	getroomsize();
+			void	setfeedback(float value);
+			float	getfeedback();
 			void	setdamp(float value);
 			float	getdamp();
 			void	setwet(float value);
 			float	getwet();
 			void	setdry(float value);
 			float	getdry();
-			void	setwidth(float value);
-			float	getwidth();
 			void	setmode(float value);
 			float	getmode();
     
@@ -150,11 +101,10 @@ private:
 private:
     //Jezar's variables:
 	float	gain;
-	float	roomsize,roomsize1;
+	float	feedback,feedback1;
 	float	damp,damp1;
-	float	wet,wet1,wet2;
+	float	wet,wet1;
 	float	dry;
-	float	width;
 	float	mode;
     int     index;
     
@@ -162,19 +112,18 @@ private:
     //These needed to be static as they were used to set the size of an array however I decided to make the comb filter buffers much larger and in vectors so these being static is a little arbitrary.
     //These store the original filter tunings of jezar's unit.
     static const int combtuning[8];
-    static const int allpasstuning[4];
+    
     
     //I made this a separate variable to possibly one day make the number of filters in the program dynamic however one can get the same effect by making the comb filters tunings 0 so I didn't add this.
     int     numcombs    = 8;
-    int     numallpasses  = 4;
+
     
     //Again these were stored in vectors to possibly make dynamic as said above.
     //With the currect code I would put these in arrays.
     // Comb filters
     std::vector<stereoComb*> combs;
-    // Allpass filters
-    std::vector<stereoAllpass*> allpasses;
     
+
     //guis
     GroupComponent group;
     Slider stereoSpreadSlider;
