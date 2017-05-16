@@ -7,7 +7,6 @@
 #ifndef _comb_
 #define _comb_
 
-#include "denormals.h"
 #include "JuceHeader.h"
 
 //This class was largely written by Jezar but has been modified to make the tuning of the comb filter variable.
@@ -48,16 +47,11 @@ inline float comb::process(float input)
     //Store the current value in our comb filter at this point.
     float output;
 	output = buffer[bufidx];
-    
-    //Do something good to it?
-//	undenormalise(output);
 
     //Filter the current value in our comb filter by combining it with the previous value in our comb filter multiplied by some dampening values.
     //Basically smoothing the value with it's last value
-	filterstore = (output*damp2) + (filterstore*damp1);
+    filterstore = output; //(output*damp2) + (filterstore*damp1);
     
-    //Do not know what this does (Jezar's functionality)
-//	undenormalise(filterstore);
 
     //Replace the current value in our comb filter with the input combined with the current value in our comb filter multiplied by a feedback value.
     buffer[bufidx] = input + (filterstore*feedback);
