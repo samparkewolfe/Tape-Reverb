@@ -27,19 +27,6 @@ void comb::mute()
 		buffer[i]=0;
 }
 
-//Setting the aplitide simplification value.
-void comb::setdamp(float val) 
-{
-    //I do not know the pro of inverting this value.
-	damp1 = val; 
-	damp2 = 1-val;
-}
-
-float comb::getdamp() 
-{
-	return damp1;
-}
-
 void comb::setfeedback(float val) 
 {
 	feedback = val;

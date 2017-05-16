@@ -17,11 +17,9 @@ public Slider::Listener
     //Here are all the Gui's for interfacing with the reverb class front end.
     ToggleButton modeToggle;    //Freeze Mode
     Slider feedbackSlider,      //Room Size
-    dampSlider,                 //Comb Dampening
     wetSlider,                  //Wet Mix
     drySlider;                  //Dry Mix
     Label feedbackLabel,
-    dampLabel,
     wetLabel,
     dryLabel;
     GroupComponent group;

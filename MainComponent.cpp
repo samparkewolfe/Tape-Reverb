@@ -35,12 +35,6 @@ MainContentComponent::MainContentComponent()
     feedbackSlider.setRange(0.0, 1.0);
     feedbackSlider.setValue(0.5);
     
-    addAndMakeVisible(&dampSlider);
-    dampSlider.addListener(this);
-    dampSlider.setSliderStyle(Slider::LinearBarVertical);
-    dampSlider.setRange(0.0, 1.0);
-    dampSlider.setValue(0.5);
-    
     addAndMakeVisible(&wetSlider);
     wetSlider.addListener(this);
     wetSlider.setSliderStyle(Slider::LinearBarVertical);
@@ -56,11 +50,6 @@ MainContentComponent::MainContentComponent()
     addAndMakeVisible(&feedbackLabel);
     feedbackLabel.setText("Feed Back", dontSendNotification);
     feedbackLabel.attachToComponent (&feedbackSlider, false);
-    
-    addAndMakeVisible(&dampLabel);
-    dampLabel.setText("Damp", dontSendNotification);
-    dampLabel.attachToComponent (&dampSlider, false);
-    
     
     addAndMakeVisible(&wetLabel);
     wetLabel.setText("Wet", dontSendNotification);
@@ -84,8 +73,6 @@ void MainContentComponent::prepareToPlay (int samplesPerBlockExpected, double sa
 
 void MainContentComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
-    
-    //bufferToFill.clearActiveBufferRegion();
     
     //Send the buffers to the reveb unit.
     float** inputs = bufferToFill.buffer->getArrayOfWritePointers();
@@ -124,12 +111,11 @@ void MainContentComponent::resized()
     areaSliders.removeFromTop(30);
     
     int sliderGap = 10;
-    int sliderWidth = areaSliders.getWidth()/5 - 10;
+    int sliderWidth = areaSliders.getWidth()/4 - 10;
     modeToggle.setBounds(areaSliders.removeFromLeft(sliderWidth));
     areaSliders.removeFromLeft(sliderGap);
     feedbackSlider.setBounds(areaSliders.removeFromLeft(sliderWidth));
     areaSliders.removeFromLeft(sliderGap);
-    dampSlider.setBounds(areaSliders.removeFromLeft(sliderWidth));
     areaSliders.removeFromLeft(sliderGap);
     wetSlider.setBounds(areaSliders.removeFromLeft(sliderWidth));
     areaSliders.removeFromLeft(sliderGap);
@@ -146,7 +132,6 @@ void MainContentComponent::sliderValueChanged(juce::Slider *slider)
 {
     //Updating the sliders.
     if(slider == & feedbackSlider)  model.setfeedback(slider->getValue());
-    if(slider == & dampSlider)      model.setdamp(slider->getValue());
     if(slider == & wetSlider)       model.setwet(slider->getValue());
     if(slider == & drySlider)       model.setdry(slider->getValue());
 }

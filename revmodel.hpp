@@ -43,8 +43,6 @@ public:
     void	setbuffers(int size);
     //This is the built in freeverb function.
     void	mute();
-    //Also a freeverb function that will set the filter cutoff value for this comb filter.
-    void	setdamp(float val);
     //This will set the feedback value for the comb filter (set by the room size variable)
     void	setfeedback(float val);
     //Each comb filter is processed as L and R to bring in spacialisation. The right buffer is bigger than the left buffer by the stereo spread variable.
@@ -71,8 +69,6 @@ public:
 			void	processreplace(float *inputL, float *inputR, float *outputL, float *outputR, long numsamples, int skip);
 			void	setfeedback(float value);
 			float	getfeedback();
-			void	setdamp(float value);
-			float	getdamp();
 			void	setwet(float value);
 			float	getwet();
 			void	setdry(float value);
@@ -102,7 +98,6 @@ private:
     //Jezar's variables:
 	float	gain;
 	float	feedback,feedback1;
-	float	damp,damp1;
 	float	wet,wet1;
 	float	dry;
 	float	mode;

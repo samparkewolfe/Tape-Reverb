@@ -72,11 +72,6 @@ void stereoComb::mute()
     combL.mute();
 }
 
-void stereoComb::setdamp(float val)
-{
-    combL.setdamp(val);
-}
-
 void stereoComb::setfeedback(float val)
 {
     combL.setfeedback(val);
@@ -133,7 +128,6 @@ revmodel::revmodel()
 	setwet(initialwet);
 	setfeedback(initialroom);
 	setdry(initialdry);
-	setdamp(initialdamp);
 	setmode(initialmode);
 
 	// Buffer will be full of rubbish - so we MUST mute them
@@ -201,24 +195,17 @@ void revmodel::update()
 	if (mode >= freezemode)
 	{
 		feedback1 = 1;
-		damp1 = 0;
 		gain = muted;
 	}
 	else
 	{
 		feedback1 = feedback;
-		damp1 = damp;
 		gain = fixedgain;
 	}
 
 	for(i=0; i<numcombs; i++)
 	{
 		combs[i]->setfeedback(feedback1);
-	}
-
-	for(i=0; i<numcombs; i++)
-	{
-		combs[i]->setdamp(damp1);
 	}
 }
 
@@ -235,15 +222,6 @@ void revmodel::setfeedback(float value)
 float revmodel::getfeedback()
 {
 	return (feedback-offsetroom)/scaleroom;
-}
-void revmodel::setdamp(float value)
-{
-	damp = value*scaledamp;
-	update();
-}
-float revmodel::getdamp()
-{
-	return damp/scaledamp;
 }
 void revmodel::setwet(float value)
 {
