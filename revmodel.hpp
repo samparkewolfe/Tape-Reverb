@@ -30,7 +30,7 @@ public:
     //Left and right comb filters.
     comb combL; //, combR;
     //These are the buffers that the comb filters write too.
-    std::array<float, 44100> bufcombL;
+//    std::array<float, 44100> bufcombL;
     //The amount of stereo spread this will be variable unlike the "stereospread" variable which is constant and used to initialise bufcombR.
     
     stereoComb();
@@ -40,7 +40,8 @@ public:
     void resized() override;
     
     //This function takes a buffersize and fills the bufcombL vectors with the size number of 0's.
-    void	setbuffers(int size);
+//    void	setbuffers(int size);
+    
     //This is the built in freeverb function.
     void	mute();
     //This will set the feedback value for the comb filter (set by the room size variable)

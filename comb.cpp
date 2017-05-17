@@ -11,13 +11,10 @@ comb::comb()
 {
 	filterstore = 0;
 	bufidx = 0;
-}
-
-//Allocating what buffer to edit.
-void comb::setbuffer(float *buf, int size)
-{
-	buffer = buf; 
-	bufsize = size;
+    std::fill(buffer.begin(), buffer.end(), 0.0);
+    bufsize = buffer.size();
+    inc = 1;
+    output = 0.0;
 }
 
 //Making all values in the buffer 0.
@@ -37,10 +34,19 @@ float comb::getfeedback()
 	return feedback;
 }
 
-void comb::setbufsize(const float& val)
+void comb::setfrequency(float val)
 {
-    bufsize = val;
+    frequency = val;
+//    std::cout << "freq: " << frequency << std::endl;
+    inc = bufsize / (44100.0f/frequency);
+//    std::cout << "inc: " << bufsize  << std::endl;
 }
+
+float comb::getfrequency()
+{
+    return frequency;
+}
+
 
 
 

@@ -43,28 +43,30 @@ stereoComb::stereoComb()
     sliderLabel.setText("Combfilter", dontSendNotification);
     sliderLabel.attachToComponent(&tuningSlider, false);
     
+    tuningSlider.setRange(0, 40.0);
+    tuningSlider.setValue(440);
 }
 
 //Copy constructor.
 stereoComb::stereoComb(const stereoComb& copy)
 {
     combL = copy.combL;
-    bufcombL = copy.bufcombL;
+//    bufcombL = copy.bufcombL;
 }
 
 //Filling the vectors with the largest values.
 //I used vectors while developing but now that I keep each buffer the same maximum size I will change them to arrays.
-void stereoComb::setbuffers(int size)
-{
-    std::fill(bufcombL.begin(), bufcombL.end(), 0.0);
-    
-    //updating the slider value.
-    tuningSlider.setRange(0, size);
-    tuningSlider.setValue(size);
-    
-    //Giving the buffers to the comb objects for them to write to.
-    combL.setbuffer(bufcombL.data(),size);
-}
+//void stereoComb::setbuffers(int size)
+//{
+//    std::fill(bufcombL.begin(), bufcombL.end(), 0.0);
+//    
+//    //updating the slider value.
+//    tuningSlider.setRange(0, size);
+//    tuningSlider.setValue(size);
+//    
+//    //Giving the buffers to the comb objects for them to write to.
+//    combL.setbuffer(bufcombL.data(),size);
+//}
 
 //Basic interfacing to Jezar's comb object.
 void stereoComb::mute()
@@ -81,7 +83,7 @@ void stereoComb::setfeedback(float val)
 //Note this is not changing the size of the vector but telling the comb filter when to loop back to 0 in the vector.
 float stereoComb::processLeft(float val)
 {
-    combL.setbufsize(tuningSlider.getValue());
+    combL.setfrequency(tuningSlider.getValue());
     return combL.process(val);
 }
  
@@ -112,7 +114,7 @@ revmodel::revmodel()
     {
         //Each comb's buffer is set to 1 second at the largest
         combs.push_back(new stereoComb());
-        combs[i]->setbuffers(44100);
+//        combs[i]->setbuffers(44100);
         //Gui:
         addAndMakeVisible(combs[i]);
     }
@@ -132,6 +134,8 @@ revmodel::revmodel()
 
 	// Buffer will be full of rubbish - so we MUST mute them
 	mute();
+    
+    setOriginalParameters();
 }
 
 //Reseting the untis settings to the original ones.
@@ -139,7 +143,7 @@ void revmodel::setOriginalParameters()
 {
     for(int i = 0; i<numcombs; i++)
     {
-        combs[i]->tuningSlider.setValue(combtuning[i]);
+        combs[i]->tuningSlider.setValue((44100.0f/float(combtuning[i])));
     }
 }
 
