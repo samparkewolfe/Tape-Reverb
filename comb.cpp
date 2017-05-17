@@ -37,9 +37,7 @@ float comb::getfeedback()
 void comb::setfrequency(float val)
 {
     frequency = val;
-//    std::cout << "freq: " << frequency << std::endl;
     inc = bufsize / (44100.0f/frequency);
-//    std::cout << "inc: " << bufsize  << std::endl;
 }
 
 float comb::getfrequency()

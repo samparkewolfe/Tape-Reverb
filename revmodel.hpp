@@ -17,36 +17,23 @@
 //Comb Filter Class
 //-------------------------------------------------------------
 //This class is a combination of two comb filters to get a stereo effect
-class stereoComb
+class CombComponent
 :
 public Component,
 Slider::Listener
 {
-    
 public:
-    //This controls the size of the comb filters buffer.
     Slider tuningSlider;
     Label sliderLabel;
-    //Left and right comb filters.
-    comb combL; //, combR;
-    //These are the buffers that the comb filters write too.
-//    std::array<float, 44100> bufcombL;
-    //The amount of stereo spread this will be variable unlike the "stereospread" variable which is constant and used to initialise bufcombR.
+    comb combL;
     
-    stereoComb();
-    stereoComb(const stereoComb& copy);
+    CombComponent();
+    CombComponent(const CombComponent& copy);
     
     void sliderValueChanged(Slider* slider) override {};
     void resized() override;
-    
-    //This function takes a buffersize and fills the bufcombL vectors with the size number of 0's.
-//    void	setbuffers(int size);
-    
-    //This is the built in freeverb function.
     void	mute();
-    //This will set the feedback value for the comb filter (set by the room size variable)
     void	setfeedback(float val);
-    //Each comb filter is processed as L and R to bring in spacialisation. The right buffer is bigger than the left buffer by the stereo spread variable.
     float    processLeft(float val);
     
 };
@@ -77,6 +64,8 @@ public:
 			void	setmode(float value);
 			float	getmode();
     
+    ~revmodel();
+    
     //These are my added functionality to the class:
     //Drawing
     void resized() override;
@@ -87,7 +76,6 @@ public:
     }
     void buttonClicked(Button* button) override
     {
-        //This is triggering the original filter parameters that are declared at the top of the .cpp file.
         if(button == &originalParamsButton)
             setOriginalParameters();
     }
@@ -104,20 +92,10 @@ private:
 	float	mode;
     int     index;
     
-    //My Variable:
-    //These needed to be static as they were used to set the size of an array however I decided to make the comb filter buffers much larger and in vectors so these being static is a little arbitrary.
-    //These store the original filter tunings of jezar's unit.
     static const int combtuning[8];
-    
-    
-    //I made this a separate variable to possibly one day make the number of filters in the program dynamic however one can get the same effect by making the comb filters tunings 0 so I didn't add this.
     int     numcombs    = 8;
 
-    
-    //Again these were stored in vectors to possibly make dynamic as said above.
-    //With the currect code I would put these in arrays.
-    // Comb filters
-    std::vector<stereoComb*> combs;
+    std::vector<CombComponent*> combs;
 
     //guis
     GroupComponent group;

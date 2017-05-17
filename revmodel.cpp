@@ -30,7 +30,7 @@ int const revmodel::combtuning[] =
 //Comb Filter Class
 //-------------------------------------------------------------
 //Stereo Comb Class
-stereoComb::stereoComb()
+CombComponent::CombComponent()
 {
     //Setting up gui.
     addAndMakeVisible(&tuningSlider);
@@ -43,52 +43,35 @@ stereoComb::stereoComb()
     sliderLabel.setText("Combfilter", dontSendNotification);
     sliderLabel.attachToComponent(&tuningSlider, false);
     
-    tuningSlider.setRange(0, 40.0);
-    tuningSlider.setValue(440);
+    tuningSlider.setRange(0, 440.0);
 }
 
 //Copy constructor.
-stereoComb::stereoComb(const stereoComb& copy)
+CombComponent::CombComponent(const CombComponent& copy)
 {
     combL = copy.combL;
 //    bufcombL = copy.bufcombL;
 }
 
-//Filling the vectors with the largest values.
-//I used vectors while developing but now that I keep each buffer the same maximum size I will change them to arrays.
-//void stereoComb::setbuffers(int size)
-//{
-//    std::fill(bufcombL.begin(), bufcombL.end(), 0.0);
-//    
-//    //updating the slider value.
-//    tuningSlider.setRange(0, size);
-//    tuningSlider.setValue(size);
-//    
-//    //Giving the buffers to the comb objects for them to write to.
-//    combL.setbuffer(bufcombL.data(),size);
-//}
-
 //Basic interfacing to Jezar's comb object.
-void stereoComb::mute()
+void CombComponent::mute()
 {
     combL.mute();
 }
 
-void stereoComb::setfeedback(float val)
+void CombComponent::setfeedback(float val)
 {
     combL.setfeedback(val);
 }
 
-//Updating the buffersize every audio iteration incase.
-//Note this is not changing the size of the vector but telling the comb filter when to loop back to 0 in the vector.
-float stereoComb::processLeft(float val)
+float CombComponent::processLeft(float val)
 {
     combL.setfrequency(tuningSlider.getValue());
     return combL.process(val);
 }
  
 //Drawing the gui.
-void stereoComb::resized()
+void CombComponent::resized()
 {
     Rectangle<int> area(getLocalBounds());
     area.removeFromTop(20);
@@ -108,14 +91,10 @@ revmodel::revmodel()
     group.setColour(GroupComponent::outlineColourId, Colours::grey);
     group.toFront(false);
     
-    
     // Initialising the combs
     for(int i = 0; i<numcombs; i++)
     {
-        //Each comb's buffer is set to 1 second at the largest
-        combs.push_back(new stereoComb());
-//        combs[i]->setbuffers(44100);
-        //Gui:
+        combs.push_back(new CombComponent());
         addAndMakeVisible(combs[i]);
     }
     
@@ -133,9 +112,13 @@ revmodel::revmodel()
 	setmode(initialmode);
 
 	// Buffer will be full of rubbish - so we MUST mute them
-	mute();
-    
-    setOriginalParameters();
+	mute();    
+}
+
+revmodel::~revmodel()
+{
+    for(auto combComponenet : combs)
+        delete combComponenet;
 }
 
 //Reseting the untis settings to the original ones.
@@ -220,12 +203,12 @@ void revmodel::update()
 // wish to take dynamic action when they are called.
 void revmodel::setfeedback(float value)
 {
-	feedback = (value*scaleroom) + offsetroom;
+    feedback = value; //(value*scaleroom) + offsetroom;
 	update();
 }
 float revmodel::getfeedback()
 {
-	return (feedback-offsetroom)/scaleroom;
+    return feedback; //(feedback-offsetroom)/scaleroom;
 }
 void revmodel::setwet(float value)
 {

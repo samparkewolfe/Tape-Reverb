@@ -22,9 +22,6 @@ public:
             void    setfrequency(float val);
             float   getfrequency();
     
-    //This was my addition to the class:
-    void setbufsize(const float& val);
-    
     std::array<float, 22050>buffer;
     
 private:
@@ -42,11 +39,11 @@ private:
 // Big to inline - but crucial for speed
 inline float comb::process(float input)
 {
-
     //Store the current value in our comb filter at this point.
     for(j = 0; j < inc; j++)
     {
         output = buffer[int(std::fmod(bufidx+j,bufsize))];
+        
         buffer[int(std::fmod(bufidx+j,bufsize))] = input + (output*feedback);
     }
     
